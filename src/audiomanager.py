@@ -1,7 +1,6 @@
 import discord
 import validators
 import youtube_dl
-from discord.ext import commands
 
 class AudioManager():
     FFMPEG_OPTIONS = {

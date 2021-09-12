@@ -1,6 +1,3 @@
-import discord
-import validators
-import youtube_dl
 from audiomanager import AudioManager
 from discord.ext import commands
 
@@ -41,6 +38,9 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def play(self, ctx, url : str):
+        if ctx.voice_client is None:
+            await self.join(ctx)
+
         voiceClient = ctx.voice_client
         voiceClient.stop()  # In case it was already playing something
 
