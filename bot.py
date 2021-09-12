@@ -1,10 +1,13 @@
 import os
+import sys
 from dotenv import load_dotenv
-from os.path import join, dirname
 
 import discord
 from discord.ext import commands, tasks
 
+# Add src directory to PATH
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+os.environ["ROOT_DIRECTORY"] = os.path.dirname(__file__)
 
 load_dotenv('./.env')
 # Get Discord API token from .env file
@@ -14,9 +17,9 @@ DISCORD_TOKEN = os.getenv('discord_token')
 client = commands.Bot(command_prefix='.', self_bot=False)
 
 # Load all cogs in cogs directory
-for filename in os.listdir('./cogs'):
+for filename in os.listdir('src/cogs'):
     if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
+        client.load_extension(f'src.cogs.{filename[:-3]}')
 
 # Executed when bot is ready
 @client.event

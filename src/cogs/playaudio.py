@@ -1,6 +1,7 @@
 import discord
 import validators
 import youtube_dl
+from audiomanager import AudioManager
 from discord.ext import commands
 
 class PlayAudio(commands.Cog):
@@ -22,8 +23,8 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def join(self, ctx):
-        voiceChannel = ctx.author.voice.channel
-        if voiceChannel is not None:
+        if ctx.author.voice is not None:
+            voiceChannel = ctx.author.voice.channel
             if ctx.voice_client is None:
                 await voiceChannel.connect();
             else:
@@ -33,18 +34,28 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def leave(self, ctx):
-        await ctx.voice_client.disconnect()
+        if ctx.voice_client is not None:
+            await ctx.voice_client.disconnect()
+        else:
+            await ctx.send("Chill, dude, I'm not even in!")
 
     @commands.command()
     async def play(self, ctx, url : str):
-        ctx.voice_client.stop()  # In case it was already playing something
         voiceClient = ctx.voice_client
+        voiceClient.stop()  # In case it was already playing something
 
-        with youtube_dl.YoutubeDL(PlayAudio.YDL_OPTIONS) as ydl:
-            info = ydl.extract_info(url, download=False)
-            url2 = info['formats'][0]['url']
-            source = await discord.FFmpegOpusAudio.from_probe(url2, **PlayAudio.FFMPEG_OPTIONS)
-            voiceClient.play(source)
+        # Check the sender is in a voice channel
+        if ctx.author.voice is not None:
+            # Move to the senders voice channel
+            voiceChannel = ctx.author.voice.channel
+            if voiceClient is None:
+                await voiceChannel.connect();
+            else:
+                await voiceClient.move_to(voiceChannel)
+            # Play the sound
+            await AudioManager.playAudio(voiceClient, url)
+        else:
+            await ctx.send("You are not in a voice channel!")
 
     @commands.command()
     async def pause(self, ctx):
