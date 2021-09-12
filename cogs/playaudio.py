@@ -1,4 +1,5 @@
 import discord
+import validators
 import youtube_dl
 from discord.ext import commands
 
@@ -7,7 +8,10 @@ class PlayAudio(commands.Cog):
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
         'options': '-vn'
     }
-    YDL_OPTIONS = {'format': 'bestaudio'}
+    YDL_OPTIONS = {
+        'format': 'bestaudio',
+        'verbose': False
+    }
 
     def __init__(self, client):
         self.client = client
