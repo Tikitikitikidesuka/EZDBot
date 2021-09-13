@@ -18,5 +18,10 @@ class Clear(commands.Cog):
         else:
             await ctx.send(amount + " is not a valid argument")
 
+    @clear.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("Missing permissions")
+
 def setup(client):
     client.add_cog(Clear(client))
