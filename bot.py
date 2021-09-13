@@ -9,7 +9,7 @@ from discord.ext import commands, tasks
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 os.environ["ROOT_DIRECTORY"] = os.path.dirname(__file__)
 
-load_dotenv('./.env')
+load_dotenv(os.path.join(os.environ["ROOT_DIRECTORY"], '.env'))
 # Get Discord API token from .env file
 DISCORD_TOKEN = os.getenv('discord_token')
 
@@ -17,7 +17,7 @@ DISCORD_TOKEN = os.getenv('discord_token')
 client = commands.Bot(command_prefix='.', self_bot=False)
 
 # Load all cogs in cogs directory
-for filename in os.listdir('src/cogs'):
+for filename in os.listdir(os.path.join(os.environ["ROOT_DIRECTORY"],'src', 'cogs')):
     if filename.endswith('.py'):
         client.load_extension(f'src.cogs.{filename[:-3]}')
 
@@ -35,6 +35,3 @@ async def on_ready():
 
 # Run the bot
 client.run(DISCORD_TOKEN)
-
-
-
