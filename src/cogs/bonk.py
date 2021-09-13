@@ -7,6 +7,7 @@ from discord.ext import commands
 
 CIRCLE_MASK_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'CircleMask.png')
 CHEEMS_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Bonk') #It just needs the frame number and .png
+BACKGROUND_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Background.png')
 
 class Bonk(commands.Cog):
     def __init__(self, client):
@@ -28,6 +29,7 @@ class Bonk(commands.Cog):
         # Open the images
         pfpImage = Image.open('pfp.png')
         pfpMask = Image.open(CIRCLE_MASK_DIR)
+        backgroundImage = Image.open(BACKGROUND_IMAGE_DIR)
         cheemsImages = [Image.open(CHEEMS_IMAGE_DIR + '0.png'), Image.open(CHEEMS_IMAGE_DIR + '1.png')]
         width = cheemsImages[0].width
         height = cheemsImages[0].height
@@ -41,11 +43,14 @@ class Bonk(commands.Cog):
         for frame in range(2):
             # Layer the images
             editedFrames.append(Image.new('RGBA', (width, height), color=(0,0,0,0)))
-            editedFrames[frame].paste(pfpImage, (635, 290))
+            editedFrames[frame].paste(backgroundImage)
+            editedFrames[frame].paste(pfpImage, (635, 290), pfpImage)
             editedFrames[frame].paste(cheemsImages[frame], (0, 0), cheemsImages[frame])
 
-        editedFrames[0].save('final.gif', format='GIF', save_all=True, transparency=0, loop=0, duration=250, disposal=2, append_images=editedFrames[1:])
-        #Send the image
+        # Save the gif
+        editedFrames[0].save('final.gif', save_all=True, format='GIF', loop=0, duration=250, append_images=editedFrames[1:])
+
+        # Send the image
         with open('final.gif', 'rb') as finalImageFile:
             finalImageDiscord = discord.File(finalImageFile)
             await ctx.send(file=finalImageDiscord)
