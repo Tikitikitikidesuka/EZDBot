@@ -22,6 +22,7 @@ class AudioManager():
         elif not allowLocal:
             return False
         else:
+            print("XD " + url)
             source = discord.FFmpegOpusAudio(url)
         voiceClient.play(source)
         return True
