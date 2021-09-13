@@ -1,5 +1,7 @@
-from audiomanager import AudioManager
 from discord.ext import commands
+from audiomanager import AudioManager
+from voicechatmanager import VCManager
+
 
 class PlayAudio(commands.Cog):
     FFMPEG_OPTIONS = {
@@ -20,21 +22,11 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def join(self, ctx):
-        if ctx.author.voice is not None:
-            voiceChannel = ctx.author.voice.channel
-            if ctx.voice_client is None:
-                await voiceChannel.connect();
-            else:
-                await ctx.voice_client.move_to(voiceChannel)
-        else:
-            await ctx.send("You are not in a voice channel!")
+        await VCManager.join(ctx)
 
     @commands.command()
     async def leave(self, ctx):
-        if ctx.voice_client is not None:
-            await ctx.voice_client.disconnect()
-        else:
-            await ctx.send("Chill, dude, I'm not even in!")
+        await VCManager.leave(ctx)
 
     @commands.command()
     async def play(self, ctx, url : str):
@@ -59,14 +51,24 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def pause(self, ctx):
-        ctx.voice_client.pause()
-        await ctx.send("Paused")
+        if ctx.voice_client.is_playing():
+            ctx.voice_client.pause()
+            await ctx.send("Paused")
+        else:
+            await ctx.send("No audio to pause")
 
     @commands.command()
     async def resume(self, ctx):
-        ctx.voice_client.resume()
-        await ctx.send("Resumed")
+        if ctx.voice_client.is_paused():
+            ctx.voice_client.resume()
+            await ctx.send("Resumed")
+        else:
+            await ctx.send("No audio to resume")
 
+    @commands.command()
+    async def stop(self, ctx):
+        ctx.voice_client.stop()
+        await ctx.send("Stopped")
 
 def setup(client):
     client.add_cog(PlayAudio(client))
