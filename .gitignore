@@ -1,4 +1,12 @@
+# Python files
 __pycache__/
+*pyc
+
+# Env file containing secret bot token
 .env
+
+# IntelliJ files
 .idea/
+
+# Mac files
 .DS_Store

@@ -10,13 +10,11 @@ class Clear(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx, amount='1'):
-        if amount == 'all':
-            await ctx.channel.purge()
-        elif amount.isnumeric():
-            await ctx.channel.purge(limit=int(amount) + 1)
+    async def clear(self, ctx, arg='1'):
+        if arg.isnumeric():
+            await ctx.channel.purge(limit=int(arg) + 1)
         else:
-            await ctx.send(amount + " is not a valid argument")
+            await ctx.send(arg + " is not a valid argument")
 
 def setup(client):
     client.add_cog(Clear(client))

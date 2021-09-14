@@ -47,31 +47,34 @@ class Bonk(commands.Cog):
         # Open the images
         pfpImage = Image.open('pfp.png').convert('RGBA')
         pfpMask = Image.open(CIRCLE_MASK_DIR)
-        backgroundImage = Image.open(os.path.join(BACKGROUND_IMAGE_DIR, choice(listdir(BACKGROUND_IMAGE_DIR))))
+        backgroundImage = Image.open(os.path.join(BACKGROUND_IMAGE_DIR, file))#choice(listdir(BACKGROUND_IMAGE_DIR))))
         cheemsImages = [Image.open(CHEEMS_IMAGE_DIR + '0.png'), Image.open(CHEEMS_IMAGE_DIR + '1.png')]
         width = cheemsImages[0].width
         height = cheemsImages[0].height
 
+        # Set editing variables
+        pfpSize = 180
+        squishDist = 10
+        pfpPosX = 635
+        pfpPosY = 290
         # Make pfp the right size
-        pfpImage = pfpImage.resize((180, 180))
+        pfpImage = pfpImage.resize((pfpSize, pfpSize))
         # Make pfp round
-        #pfpImage.putalpha(pfpMask)
         makeImageRound(pfpImage, pfpMask)
-        pfpImage.show()
-
+        # Squish pfp for the second frame
+        squishedPfpImage = pfpImage.resize((pfpSize, pfpSize - squishDist))
+                
         # Edit frames
         editedFrames = []
         # Edit first frame
         editedFrames.append(Image.new('RGBA', (width, height), color=(0,0,0,0)))
         editedFrames[0].paste(backgroundImage)
-        editedFrames[0].paste(pfpImage, (635, 290), pfpImage)
+        editedFrames[0].paste(pfpImage, (pfpPosX, pfpPosY), pfpImage)
         editedFrames[0].paste(cheemsImages[0], (0, 0), cheemsImages[0])
         # Edit second frame
-        new_height = 170
-        pfpImage = pfpImage.resize((180, new_height))
         editedFrames.append(Image.new('RGBA', (width, height), color=(0,0,0,0)))
         editedFrames[1].paste(backgroundImage)
-        editedFrames[1].paste(pfpImage, (635, 290 + 180-new_height), pfpImage)
+        editedFrames[1].paste(squishedPfpImage, (pfpPosX, pfpPosY + squishDist), squishedPfpImage)
         editedFrames[1].paste(cheemsImages[1], (0, 0), cheemsImages[1])
         
         # Save the gif
@@ -83,6 +86,5 @@ class Bonk(commands.Cog):
             await ctx.send(file=finalImageDiscord)
 
         
-
 def setup(client):
     client.add_cog(Bonk(client))
