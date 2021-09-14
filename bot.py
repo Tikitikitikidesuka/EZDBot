@@ -28,7 +28,7 @@ async def on_ready():
         status=discord.Status.online,
         activity=discord.Activity(
             type=discord.ActivityType.listening,
-            name="to you :3"
+            name="you :3"
         )
     )
     print('Logged in as \"{0}\" ({0.id})'.format(client.user))

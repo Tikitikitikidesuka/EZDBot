@@ -1,14 +1,31 @@
 import os
+from posix import listdir
 import discord
 import requests
 from PIL import Image
-from random import randint
+from random import choice
 from discord.ext import commands
 
 
 CIRCLE_MASK_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'CircleMask.png')
 CHEEMS_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Bonk') # It just needs the frame number and .png
-BACKGROUND_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Background') # It just needs the bg number and .png
+BACKGROUND_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'backgrounds') # It just needs the bg number and .png
+
+
+def makeImageRound(image:Image, mask:Image):
+    if image.mode == 'RGBA':
+        if image.width == mask.width and image.height == mask.height:
+            for x in range(image.width):
+                for y in range(image.height):
+                    mkPixel = mask.getpixel((x, y))
+                    imPixel = image.getpixel((x,y))
+                    imPixel = (imPixel[0], imPixel[1], imPixel[2], min(mkPixel, imPixel[3]))
+                    image.putpixel((x,y), imPixel)
+            return True
+    else:
+        print("Image on makeImageRound has to be RGBA")
+    return False
+                
 
 class Bonk(commands.Cog):
     def __init__(self, client):
@@ -28,9 +45,9 @@ class Bonk(commands.Cog):
             handler.write(img_data)
 
         # Open the images
-        pfpImage = Image.open('pfp.png')
+        pfpImage = Image.open('pfp.png').convert('RGBA')
         pfpMask = Image.open(CIRCLE_MASK_DIR)
-        backgroundImage = Image.open(BACKGROUND_IMAGE_DIR + str(randint(0, 5)) + '.png')
+        backgroundImage = Image.open(os.path.join(BACKGROUND_IMAGE_DIR, choice(listdir(BACKGROUND_IMAGE_DIR))))
         cheemsImages = [Image.open(CHEEMS_IMAGE_DIR + '0.png'), Image.open(CHEEMS_IMAGE_DIR + '1.png')]
         width = cheemsImages[0].width
         height = cheemsImages[0].height
@@ -38,18 +55,27 @@ class Bonk(commands.Cog):
         # Make pfp the right size
         pfpImage = pfpImage.resize((180, 180))
         # Make pfp round
-        pfpImage.putalpha(pfpMask)
+        #pfpImage.putalpha(pfpMask)
+        makeImageRound(pfpImage, pfpMask)
+        pfpImage.show()
 
+        # Edit frames
         editedFrames = []
-        for frame in range(2):
-            # Layer the images
-            editedFrames.append(Image.new('RGBA', (width, height), color=(0,0,0,0)))
-            editedFrames[frame].paste(backgroundImage)
-            editedFrames[frame].paste(pfpImage, (635, 290), pfpImage)
-            editedFrames[frame].paste(cheemsImages[frame], (0, 0), cheemsImages[frame])
-
+        # Edit first frame
+        editedFrames.append(Image.new('RGBA', (width, height), color=(0,0,0,0)))
+        editedFrames[0].paste(backgroundImage)
+        editedFrames[0].paste(pfpImage, (635, 290), pfpImage)
+        editedFrames[0].paste(cheemsImages[0], (0, 0), cheemsImages[0])
+        # Edit second frame
+        new_height = 170
+        pfpImage = pfpImage.resize((180, new_height))
+        editedFrames.append(Image.new('RGBA', (width, height), color=(0,0,0,0)))
+        editedFrames[1].paste(backgroundImage)
+        editedFrames[1].paste(pfpImage, (635, 290 + 180-new_height), pfpImage)
+        editedFrames[1].paste(cheemsImages[1], (0, 0), cheemsImages[1])
+        
         # Save the gif
-        editedFrames[0].save('final.gif', save_all=True, format='GIF', loop=0, duration=250, append_images=editedFrames[1:])
+        editedFrames[0].save('final.gif', save_all=True, format='GIF', loop=0, duration=300, append_images=[editedFrames[1], editedFrames[1]])
 
         # Send the image
         with open('final.gif', 'rb') as finalImageFile:
