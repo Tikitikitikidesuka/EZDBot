@@ -2,12 +2,13 @@ import os
 import discord
 import requests
 from PIL import Image
+from random import randint
 from discord.ext import commands
 
 
 CIRCLE_MASK_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'CircleMask.png')
-CHEEMS_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Bonk') #It just needs the frame number and .png
-BACKGROUND_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Background.png')
+CHEEMS_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Bonk') # It just needs the frame number and .png
+BACKGROUND_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Background') # It just needs the bg number and .png
 
 class Bonk(commands.Cog):
     def __init__(self, client):
@@ -29,7 +30,7 @@ class Bonk(commands.Cog):
         # Open the images
         pfpImage = Image.open('pfp.png')
         pfpMask = Image.open(CIRCLE_MASK_DIR)
-        backgroundImage = Image.open(BACKGROUND_IMAGE_DIR)
+        backgroundImage = Image.open(BACKGROUND_IMAGE_DIR + str(randint(0, 5)) + '.png')
         cheemsImages = [Image.open(CHEEMS_IMAGE_DIR + '0.png'), Image.open(CHEEMS_IMAGE_DIR + '1.png')]
         width = cheemsImages[0].width
         height = cheemsImages[0].height
