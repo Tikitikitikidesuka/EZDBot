@@ -9,7 +9,7 @@ from discord.ext import commands, tasks
 
 def exitVerbose():
     print("Exiting the program...")
-    exit()
+    sys.exit(1)
 
 def checkToken(token:str):
     return get('https://discord.com/api/v6/auth/login', headers={"Authorization": token}).status_code == 200
