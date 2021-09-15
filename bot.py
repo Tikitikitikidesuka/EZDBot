@@ -1,17 +1,41 @@
 import os
 import sys
+from requests import get
 from dotenv import load_dotenv
 
 import discord
 from discord.ext import commands, tasks
 
+
+def exitVerbose():
+    print("Exiting the program...")
+    exit()
+
+def checkToken(token:str):
+    return get('https://discord.com/api/v6/auth/login', headers={"Authorization": token}).status_code == 200
+
 # Add src directory to PATH
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 os.environ["ROOT_DIRECTORY"] = os.path.dirname(__file__)
 
-load_dotenv(os.path.join(os.environ["ROOT_DIRECTORY"], '.env'))
+#Check if .env file exists
+envPath = os.path.join(os.environ["ROOT_DIRECTORY"], '.env')
+if not os.path.isfile(envPath):
+    print("Missing .env file required for connection.")
+    exitVerbose()
+
 # Get Discord API token from .env file
+load_dotenv(envPath)
 DISCORD_TOKEN = os.getenv('discord_token')
+#Check if the token was in the .env file
+if not DISCORD_TOKEN:
+    print(
+        "discord_token enviroment variable missing.\n"
+        "Add the following line in the .env file:\n\n"
+        "discord_token = \"your_token\"\n\n"
+        "replacing your_token with your bot\'s token."
+    )
+    exitVerbose()
 
 # Create bot
 client = commands.Bot(command_prefix='.', self_bot=False)
@@ -34,4 +58,8 @@ async def on_ready():
     print('Logged in as \"{0}\" ({0.id})'.format(client.user))
 
 # Run the bot
-client.run(DISCORD_TOKEN)
+try:
+    client.run(DISCORD_TOKEN)
+except:
+    print("Login error, check that discord_token in .env file is correct.")
+    exitVerbose()
