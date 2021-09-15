@@ -11,9 +11,6 @@ def exitVerbose():
     print("Exiting the program...")
     sys.exit(1)
 
-def checkToken(token:str):
-    return get('https://discord.com/api/v6/auth/login', headers={"Authorization": token}).status_code == 200
-
 # Add src directory to PATH
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 os.environ["ROOT_DIRECTORY"] = os.path.dirname(__file__)
