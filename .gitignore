@@ -1,5 +1,6 @@
 # Temp files used by the program
 temp/*
+!temp/.gitkeep
 
 # Python files
 __pycache__/
