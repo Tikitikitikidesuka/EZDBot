@@ -20,7 +20,7 @@ Some useful modules, also called cogs, come out of the box:
 
 These cogs are being developed alongside the bot to test the managers that make the bot so versatile. They can easily be removed in case they are not needed just by moving their corresponding ```.py``` file out of the cogs folder located at ```src/cogs```.
 
-Just as simple as removing any cog, adding a new one is as easy as placing the developed ```.py``` file in the cogs folder. A template cog comes in the docs with all the necesary code to make it work. Developing it after that just comes down to your python skills and your imagination.
+Just as simple as removing a cog, adding a new one is as easy as placing the developed ```.py``` file in the cogs folder. A [template cog](docs/cogs/template_cog.md) in the docs directory provides all the necesary code to start developing any feature. The only extra thing needed is a little python skill and some imagination :)
 
 ## Configuring the bot
 For the bot to work you must set ```discord_token``` on a ```.env``` file in the root dir of the project.
