@@ -9,7 +9,7 @@ discord_token = "your_token"
 
 ## Cogs
 * ascii_image: Produces ascii art from images sent
-* [bonk](docs/cogs/BONK.md): Makes a gif of "Cheems" bonking a user's profile picture
+* [bonk](docs/cogs/bonk.md): Makes a gif of "Cheems" bonking a user's profile picture
 * pfp: Extracts a user's profile picture
 * play_audio: Plays a youtube video on voice chat
 * clear: Deletes the N previous sent messages in a channel
