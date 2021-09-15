@@ -1,6 +1,9 @@
 from discord.ext import commands
 from discord.ext.commands.core import has_permissions
 
+from textchatmanager import TXTManager
+
+
 class Say(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -18,7 +21,7 @@ class Say(commands.Cog):
         response = response[:-1]
         if len(response) < 2000:
             await ctx.message.delete()
-            await ctx.send(response)
+            await TXTManager.send(ctx, response)
     
     @say.error
     async def say_error(self, ctx, error):
@@ -31,8 +34,7 @@ class Say(commands.Cog):
         for textfragment in text:
             response += textfragment + " "
         response = response[:-1]
-        if len(response) < 2000:
-            await ctx.send(response)
+        await TXTManager.send(ctx, response)
 
 def setup(client):
     client.add_cog(Say(client))

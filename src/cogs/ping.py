@@ -1,5 +1,7 @@
 from discord.ext import commands
 
+from textchatmanager import TXTManager
+
 class Ping(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -10,7 +12,7 @@ class Ping(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send("Ping: " + str(round(self.client.latency * 1000)) + " ms")
+        await TXTManager.send("Ping: " + str(round(self.client.latency * 1000)) + " ms")
 
 def setup(client):
     client.add_cog(Ping(client))

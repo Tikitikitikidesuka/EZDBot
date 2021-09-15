@@ -4,6 +4,8 @@ import PIL.Image
 import validators
 from discord.ext import commands
 
+from textchatmanager import TXTManager
+
 ASCII_CHARS = "█▓▒░"
 IMAGE_SIZE = 44
 
@@ -65,7 +67,7 @@ class AsciiImage(commands.Cog):
 
         # Delete the image file
         os.remove('image.png')
-        await ctx.message.delete()
+        await TXTManager.deleteMessage(ctx)
         await ctx.send(ascii_image)
 
 def setup(client):

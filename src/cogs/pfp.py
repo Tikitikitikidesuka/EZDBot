@@ -1,4 +1,7 @@
 from discord.ext import commands
+import discord
+
+from textchatmanager import TXTManager
 
 class PFP(commands.Cog):
     def __init__(self, client):
@@ -10,9 +13,18 @@ class PFP(commands.Cog):
 
     @commands.command()
     async def pfp(self, ctx):
-        print(ctx.message.mentions[0].id)
-        await ctx.send(ctx.message.mentions[0].avatar_url)
-        #await ctx.send(ctx.message.author.mention())
+        if len(ctx.message.mentions) > 0:
+            await TXTManager.send(ctx.message.mentions[0].avatar_url)
+        else:
+            await ctx.send("Missing mention, usage:\npfp @user")
+    
+    @commands.command()
+    async def pfp4me(self, ctx):
+        if len(ctx.message.mentions) > 0:
+            await TXTManager.dm(ctx.message.author, ctx.message.mentions[0].avatar_url)
+            await TXTManager.deleteMessage(ctx)
+        else:
+            await ctx.send("Missing mention, usage:\npfp4me @user")
 
 def setup(client):
     client.add_cog(PFP(client))
