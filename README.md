@@ -23,7 +23,9 @@ Python dependencies are specified in the requirements.txt file in the root folde
 This project was developed by:
 * SneakyGerbil
     * deesneakygerbil@gmail.com
-    * https://github.com/SneakyGerbil
+    * [Itch.io](https://sneakygerbil.itch.io)
+    * [YouTube](https://www.youtube.com/channel/UC4r_WrJ5SXjd10lFQdO3UyQ)
+    * [GitHub](https://github.com/SneakyGerbil)
 
 ## License
 Shield: [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]

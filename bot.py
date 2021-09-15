@@ -35,7 +35,7 @@ if not DISCORD_TOKEN:
     exitVerbose()
 
 # Create bot
-client = commands.Bot(command_prefix='.', self_bot=False)
+client = commands.Bot(command_prefix='.', self_bot=False, case_insensitive=True)
 
 # Load all cogs in cogs directory
 for filename in os.listdir(os.path.join(os.environ["ROOT_DIRECTORY"],'src', 'cogs')):
