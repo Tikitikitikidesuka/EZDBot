@@ -1,5 +1,4 @@
 import os
-from posix import listdir
 import discord
 import requests
 from PIL import Image
@@ -47,7 +46,7 @@ class Bonk(commands.Cog):
         # Open the images
         pfpImage = Image.open('pfp.png').convert('RGBA')
         pfpMask = Image.open(CIRCLE_MASK_DIR)
-        backgroundImage = Image.open(os.path.join(BACKGROUND_IMAGE_DIR, file))#choice(listdir(BACKGROUND_IMAGE_DIR))))
+        backgroundImage = Image.open(os.path.join(BACKGROUND_IMAGE_DIR, choice(os.listdir(BACKGROUND_IMAGE_DIR))))
         cheemsImages = [Image.open(CHEEMS_IMAGE_DIR + '0.png'), Image.open(CHEEMS_IMAGE_DIR + '1.png')]
         width = cheemsImages[0].width
         height = cheemsImages[0].height
