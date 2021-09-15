@@ -4,7 +4,7 @@ from requests import get
 from dotenv import load_dotenv
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 
 
 def exitVerbose():
