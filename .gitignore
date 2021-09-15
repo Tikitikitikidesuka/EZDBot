@@ -1,3 +1,6 @@
+# Temp files used by the program
+temp/*
+
 # Python files
 __pycache__/
 *pyc

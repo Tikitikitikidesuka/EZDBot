@@ -9,7 +9,9 @@ from discord.ext import commands
 CIRCLE_MASK_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'CircleMask.png')
 CHEEMS_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Bonk') # It just needs the frame number and .png
 BACKGROUND_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'backgrounds') # It just needs the bg number and .png
-
+TEMP_FILE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'temp')
+TEMP_PFP_IMAGE_PATH = os.path.join(TEMP_FILE_DIR, 'pfp.png')
+TEMP_FINAL_GIF_PATH = os.path.join(TEMP_FILE_DIR, 'bonk.gif')
 
 def makeImageRound(image:Image, mask:Image):
     if image.mode == 'RGBA':
@@ -40,11 +42,11 @@ class Bonk(commands.Cog):
         pfp_url = ctx.message.mentions[0].avatar_url
         # Download the image
         img_data = requests.get(pfp_url).content
-        with open('pfp.png', 'wb') as handler:
+        with open(TEMP_PFP_IMAGE_PATH, 'wb') as handler:
             handler.write(img_data)
 
         # Open the images
-        pfpImage = Image.open('pfp.png').convert('RGBA')
+        pfpImage = Image.open(TEMP_PFP_IMAGE_PATH).convert('RGBA')
         pfpMask = Image.open(CIRCLE_MASK_DIR)
         backgroundImage = Image.open(os.path.join(BACKGROUND_IMAGE_DIR, choice(os.listdir(BACKGROUND_IMAGE_DIR))))
         cheemsImages = [Image.open(CHEEMS_IMAGE_DIR + '0.png'), Image.open(CHEEMS_IMAGE_DIR + '1.png')]
@@ -77,12 +79,16 @@ class Bonk(commands.Cog):
         editedFrames[1].paste(cheemsImages[1], (0, 0), cheemsImages[1])
         
         # Save the gif
-        editedFrames[0].save('final.gif', save_all=True, format='GIF', loop=0, duration=300, append_images=[editedFrames[1], editedFrames[1]])
+        editedFrames[0].save(TEMP_FINAL_GIF_PATH, save_all=True, format='GIF', loop=0, duration=300, append_images=[editedFrames[1], editedFrames[1]])
 
         # Send the image
-        with open('final.gif', 'rb') as finalImageFile:
+        with open(TEMP_FINAL_GIF_PATH, 'rb') as finalImageFile:
             finalImageDiscord = discord.File(finalImageFile)
             await ctx.send(file=finalImageDiscord)
+        
+        # Delete fetched pfp and final gif
+        os.remove(TEMP_PFP_IMAGE_PATH)
+        os.remove(TEMP_FINAL_GIF_PATH)
 
         
 def setup(client):
