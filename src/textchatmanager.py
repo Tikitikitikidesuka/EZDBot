@@ -7,7 +7,7 @@ class TXTManager():
     # Safe way of sending messages as response on channel
     @classmethod
     async def send(cls, ctx, message, safe=True):
-        if (not safe) or (isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN):
+        if (not safe) or (isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN) or isinstance(message, Asset):
             await ctx.send(message)
             return True
         return False
@@ -15,11 +15,7 @@ class TXTManager():
     # Safe way of sending dm messages
     @classmethod
     async def dm(cls, user:User, message, safe=True):
-        if isinstance(message, str):
-            if (not safe) and len(message) <= MAX_MESSAGE_LEN:
-                await user.send(message)
-                return True
-        elif isinstance(message, Asset):
+        if (not safe) or (isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN) or isinstance(message, Asset):
             await user.send(message)
             return True
         return False

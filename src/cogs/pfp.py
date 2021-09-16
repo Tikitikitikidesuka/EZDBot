@@ -14,9 +14,9 @@ class PFP(commands.Cog):
     @commands.command()
     async def pfp(self, ctx):
         if len(ctx.message.mentions) > 0:
-            await TXTManager.send(ctx.message.mentions[0].avatar_url)
+            await TXTManager.send(ctx, ctx.message.mentions[0].avatar_url)
         else:
-            await ctx.send("Missing mention, usage:\npfp @user")
+            await TXTManager.send(ctx, "Missing mention, usage:\npfp @user")
     
     @commands.command()
     async def pfp4me(self, ctx):
