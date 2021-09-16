@@ -1,5 +1,6 @@
 import os
 import sys
+from requests import get
 from dotenv import load_dotenv
 
 import discord
