@@ -1,6 +1,8 @@
-import discord
 import validators
 import youtube_dl
+
+import discord
+from discord.ext.commands import Context
 
 class AudioManager():
     FFMPEG_OPTIONS = {
@@ -13,16 +15,24 @@ class AudioManager():
     }
 
     @classmethod
-    async def playAudio(cls, voiceClient, url:str, allowLocal=False):
-        if validators.url(url):
-            with youtube_dl.YoutubeDL(cls.YDL_OPTIONS) as ydl:
-                info = ydl.extract_info(url, download=False)
-                url2 = info['formats'][0]['url']
-                source = await discord.FFmpegOpusAudio.from_probe(url2, **cls.FFMPEG_OPTIONS)
-        elif not allowLocal:
-            return False
+    async def playAudio(cls, ctx:Context, url:str, allowLocal=False):
+        if not ctx.voice_client is None:
+            if validators.url(url):
+                with youtube_dl.YoutubeDL(cls.YDL_OPTIONS) as ydl:
+                    info = ydl.extract_info(url, download=False)
+                    url2 = info['formats'][0]['url']
+                    source = await discord.FFmpegOpusAudio.from_probe(url2, **cls.FFMPEG_OPTIONS)
+            elif allowLocal:
+                print("Fetching: LOCAL/ " + url)
+                source = discord.FFmpegOpusAudio(url)
+            else:
+                return False
+            ctx.voice_client.play(source)
+            return True
         else:
-            print("XD " + url)
-            source = discord.FFmpegOpusAudio(url)
-        voiceClient.play(source)
-        return True
+            print("It is none")
+            return False
+    
+    @classmethod
+    async def pauseAudio(cls, ctx:Context):
+        await ctx.voice_client.pause()

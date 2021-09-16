@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from textchatmanager import TXTManager
 
-ASCII_CHARS = "█▓▒░"
+ASCII_CHARS = "░▒▓█"
 IMAGE_SIZE = 44
 
 def resizeImage(image, new_width=IMAGE_SIZE):
@@ -24,7 +24,7 @@ def pixels_to_ascii(image):
     pixels = image.getdata()
     characters = ""
     for pixel in pixels:
-        characters += ASCII_CHARS[int((pixel/255)*len(ASCII_CHARS))-1]
+        characters += ASCII_CHARS[int((len(ASCII_CHARS))*pixel/256)]
     return characters
 
 class AsciiImage(commands.Cog):

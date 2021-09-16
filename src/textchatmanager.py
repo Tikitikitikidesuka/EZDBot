@@ -6,17 +6,17 @@ MAX_MESSAGE_LEN = 2000
 class TXTManager():
     # Safe way of sending messages as response on channel
     @classmethod
-    async def send(cls, ctx, message):
-        if isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN:
+    async def send(cls, ctx, message, safe=True):
+        if (not safe) or (isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN):
             await ctx.send(message)
             return True
         return False
 
     # Safe way of sending dm messages
     @classmethod
-    async def dm(cls, user:User, message):
+    async def dm(cls, user:User, message, safe=True):
         if isinstance(message, str):
-            if len(message) <= MAX_MESSAGE_LEN:
+            if (not safe) and len(message) <= MAX_MESSAGE_LEN:
                 await user.send(message)
                 return True
         elif isinstance(message, Asset):

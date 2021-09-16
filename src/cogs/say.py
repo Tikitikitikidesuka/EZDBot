@@ -20,13 +20,13 @@ class Say(commands.Cog):
             response += textfragment + " "
         response = response[:-1]
         if len(response) < 2000:
-            await ctx.message.delete()
+            await TXTManager.deleteMessage(ctx)
             await TXTManager.send(ctx, response)
     
     @say.error
     async def say_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            await ctx.send("Missing permision to manage messages\nUse 'repeat' command instead")
+            await TXTManager.send(ctx, "Missing permision to manage messages\nUse 'repeat' command instead", safe=False)
     
     @commands.command()
     async def repeat(self, ctx, *text):

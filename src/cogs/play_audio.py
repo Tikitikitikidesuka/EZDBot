@@ -1,5 +1,6 @@
 from discord.ext import commands
 from audiomanager import AudioManager
+from textchatmanager import TXTManager
 from voicechatmanager import VCManager
 
 
@@ -30,45 +31,32 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def play(self, ctx, url : str):
-        if ctx.voice_client is None:
-            await self.join(ctx)
-
-        voiceClient = ctx.voice_client
-        voiceClient.stop()  # In case it was already playing something
-
-        # Check the sender is in a voice channel
-        if ctx.author.voice is not None:
-            # Move to the senders voice channel
-            voiceChannel = ctx.author.voice.channel
-            if voiceClient is None:
-                await voiceChannel.connect();
-            else:
-                await voiceClient.move_to(voiceChannel)
-            # Play the sound
-            await AudioManager.playAudio(voiceClient, url)
+        if await VCManager.join(ctx):
+            if not await AudioManager.playAudio(ctx, url):
+                await TXTManager.send(ctx, "Invalid audio source", safe=False)
         else:
-            await ctx.send("You are not in a voice channel!")
+            await TXTManager.send(ctx, "You are not in a voice channel!", safe=False)
 
     @commands.command()
     async def pause(self, ctx):
         if ctx.voice_client.is_playing():
-            ctx.voice_client.pause()
-            await ctx.send("Paused")
+            await AudioManager.pauseAudio(ctx)
+            await TXTManager.send(ctx, "Paused", safe=False)
         else:
-            await ctx.send("No audio to pause")
+            await TXTManager.send(ctx, "No audio to pause", safe=False)
 
     @commands.command()
     async def resume(self, ctx):
         if ctx.voice_client.is_paused():
             ctx.voice_client.resume()
-            await ctx.send("Resumed")
+            await TXTManager.send(ctx,"Resumed", safe=False)
         else:
-            await ctx.send("No audio to resume")
+            await TXTManager.send(ctx,"No audio to resume", safe=False)
 
     @commands.command()
     async def stop(self, ctx):
         ctx.voice_client.stop()
-        await ctx.send("Stopped")
+        await TXTManager.send(ctx,"Stopped", safe=False)
 
 def setup(client):
     client.add_cog(PlayAudio(client))

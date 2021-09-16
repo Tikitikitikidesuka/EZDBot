@@ -1,8 +1,8 @@
-
+from discord.ext.commands import Context
 
 class VCManager():
     @classmethod
-    async def join(cls, ctx):
+    async def join(cls, ctx:Context):
         if ctx.author.voice is not None:
             voiceChannel = ctx.author.voice.channel
             if ctx.voice_client is None:
@@ -13,7 +13,7 @@ class VCManager():
         return False
 
     @classmethod
-    async def leave(cls, ctx):
+    async def leave(cls, ctx:Context):
         if ctx.voice_client is not None:
             await ctx.voice_client.disconnect()
             return True
