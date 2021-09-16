@@ -27,7 +27,8 @@ class TXTManager():
     # Safe way of deleting messages on servers
     @classmethod
     async def deleteMessage(cls, ctx):
-        if not isinstance(ctx.channel, DMChannel):
+        if not isinstance(ctx.channel, DMChannel) and ctx.me.guild_permissions.manage_messages:
             await ctx.message.delete()
             return True
         return False
+        
