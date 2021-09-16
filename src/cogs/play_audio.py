@@ -23,11 +23,13 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def join(self, ctx):
-        await VCManager.join(ctx)
+        if not await VCManager.join(ctx):
+            await TXTManager.send(ctx, "You are not in a voice channel")
 
     @commands.command()
     async def leave(self, ctx):
-        await VCManager.leave(ctx)
+        if not await VCManager.leave(ctx):
+            await TXTManager.send(ctx, "I'm not in a voice channel")
 
     @commands.command()
     async def play(self, ctx, url : str):
@@ -39,23 +41,21 @@ class PlayAudio(commands.Cog):
 
     @commands.command()
     async def pause(self, ctx):
-        if ctx.voice_client.is_playing():
-            await AudioManager.pauseAudio(ctx)
+        if await AudioManager.pauseAudio(ctx):
             await TXTManager.send(ctx, "Paused", safe=False)
         else:
             await TXTManager.send(ctx, "No audio to pause", safe=False)
 
     @commands.command()
     async def resume(self, ctx):
-        if ctx.voice_client.is_paused():
-            ctx.voice_client.resume()
+        if await AudioManager.resumeAudio(ctx):
             await TXTManager.send(ctx,"Resumed", safe=False)
         else:
             await TXTManager.send(ctx,"No audio to resume", safe=False)
 
     @commands.command()
     async def stop(self, ctx):
-        ctx.voice_client.stop()
+        await AudioManager.stopAudio(ctx)
         await TXTManager.send(ctx,"Stopped", safe=False)
 
 def setup(client):

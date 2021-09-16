@@ -35,4 +35,18 @@ class AudioManager():
     
     @classmethod
     async def pauseAudio(cls, ctx:Context):
-        await ctx.voice_client.pause()
+        if not ctx.voice_client is None and ctx.voice_client.is_playing():
+            ctx.voice_client.pause()
+            return True
+        return False
+    
+    @classmethod
+    async def resumeAudio(cls, ctx:Context):
+        if not ctx.voice_client is None and ctx.voice_client.is_paused():
+            ctx.voice_client.resume()
+            return True
+        return False
+
+    @classmethod
+    async def stopAudio(cls, ctx:Context):
+        await ctx.voice_client.stop()
