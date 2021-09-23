@@ -11,12 +11,12 @@ At this time the bot has:
 
 ## Modules / Cogs
 Some useful modules, also called cogs, come out of the box:
-* [ascii_image](docs/cogs/clear.md): Produces ascii art from images sent
-* [bonk](docs/cogs/bonk.md): Makes a gif of "Cheems" bonking a user's profile picture
-* [pfp](docs/cogs/clear.md): Extracts a user's profile picture
-* [play_audio](docs/cogs/clear.md): Plays a youtube video on voice chat
-* [clear](docs/cogs/clear.md): Deletes the N previous sent messages in a channel
-* [say](docs/cogs/say.md): Makes the bot say something
+* [ascii_image](docs/cogs/ASCII_IMAGE.md): Produces ascii art from images sent
+* [bonk](docs/cogs/BONK.md): Makes a gif of "Cheems" bonking a user's profile picture
+* [pfp](docs/cogs/PFP.md): Extracts a user's profile picture
+* [play_audio](docs/cogs/PLAY_AUDIO.md): Plays a youtube video on voice chat
+* [clear](docs/cogs/CLEAR.md): Deletes the N previous sent messages in a channel
+* [say](docs/cogs/SAY.md): Makes the bot say something
 
 These cogs are being developed alongside the bot to test the managers that make the bot so versatile. They can easily be removed in case they are not needed just by moving their corresponding ```.py``` file out of the cogs folder located at ```src/cogs```.
 
