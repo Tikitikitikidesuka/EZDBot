@@ -5,6 +5,8 @@ from PIL import Image
 from random import choice
 from discord.ext import commands
 
+from textchatmanager import TXTManager
+
 
 CIRCLE_MASK_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'CircleMask.png')
 CHEEMS_IMAGE_DIR = os.path.join(os.environ["ROOT_DIRECTORY"], 'assets', 'images', 'bonk', 'Bonk') # It just needs the frame number and .png
@@ -84,7 +86,7 @@ class Bonk(commands.Cog):
         # Send the image
         with open(TEMP_FINAL_GIF_PATH, 'rb') as finalImageFile:
             finalImageDiscord = discord.File(finalImageFile)
-            await ctx.send(file=finalImageDiscord)
+            await TXTManager.send(ctx, finalImageDiscord)
         
         # Delete fetched pfp and final gif
         os.remove(TEMP_PFP_IMAGE_PATH)

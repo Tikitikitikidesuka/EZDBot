@@ -21,10 +21,11 @@ class PFP(commands.Cog):
     @commands.command()
     async def pfp4me(self, ctx):
         if len(ctx.message.mentions) > 0:
+            await TXTManager.dm(ctx.message.author, "Here is " + ctx.message.author.name + "\'s profile picture:")
             await TXTManager.dm(ctx.message.author, ctx.message.mentions[0].avatar_url)
             await TXTManager.deleteMessage(ctx)
         else:
-            await ctx.send("Missing mention, usage:\npfp4me @user")
+            await TXTManager.send(ctx, "Missing mention, usage:\npfp4me @user")
 
 def setup(client):
     client.add_cog(PFP(client))

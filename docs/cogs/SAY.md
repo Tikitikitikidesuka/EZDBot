@@ -5,7 +5,7 @@
 * [Repeat](#repeat)
 
 ## Say
-The bot sends ```text``` and deletes the ```say``` command message.
+The bot sends ```text``` to the channel and deletes the ```say``` command message.
 This will not work if the bot does't have permission to delete messages.
 Instead it will suggest using the [```repeat```](#repeat) command.
 
@@ -13,7 +13,7 @@ Usage:
 > ```say text```
 
 ## Repeat
-The bot sends ```text```.
+The bot sends ```text``` to the channel.
 
 Usage: 
 > ```repeat text```

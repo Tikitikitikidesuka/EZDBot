@@ -1,5 +1,7 @@
 from discord.ext import commands
 
+from textchatmanager import TXTManager
+
 class Clear(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -9,12 +11,12 @@ class Clear(commands.Cog):
         print("Clear cog was loaded successfully")
 
     @commands.command()
-    @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, arg='1'):
         if arg.isnumeric():
-            await ctx.channel.purge(limit=int(arg) + 1)
+            if not await TXTManager.deletePrevMessages(ctx, int(arg) +1):
+                await TXTManager.send(ctx, "Missing permissions to manage messages")
         else:
-            await ctx.send(arg + " is not a valid argument")
+            await TXTManager.send(ctx, arg + " is not a valid argument", safe=False)
 
 def setup(client):
     client.add_cog(Clear(client))

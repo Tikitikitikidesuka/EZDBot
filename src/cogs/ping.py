@@ -12,7 +12,7 @@ class Ping(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await TXTManager.send("Ping: " + str(round(self.client.latency * 1000)) + " ms")
+        await TXTManager.send(ctx, "Ping: " + str(round(self.client.latency * 1000)) + " ms")
 
 def setup(client):
     client.add_cog(Ping(client))

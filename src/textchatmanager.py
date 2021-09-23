@@ -1,4 +1,4 @@
-from discord import User, Asset, DMChannel
+from discord import User, Asset, DMChannel, File
 
 
 MAX_MESSAGE_LEN = 2000
@@ -10,6 +10,9 @@ class TXTManager():
         if (not safe) or (isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN) or isinstance(message, Asset):
             await ctx.send(message)
             return True
+        elif isinstance(message, File):
+            await ctx.send(file=message)
+            return True
         return False
 
     # Safe way of sending dm messages
@@ -18,6 +21,9 @@ class TXTManager():
         if (not safe) or (isinstance(message, str) and len(message) <= MAX_MESSAGE_LEN) or isinstance(message, Asset):
             await user.send(message)
             return True
+        elif isinstance(message, File):
+            await user.send(file=message)
+            return True
         return False
     
     # Safe way of deleting messages on servers
@@ -25,6 +31,14 @@ class TXTManager():
     async def deleteMessage(cls, ctx):
         if not isinstance(ctx.channel, DMChannel) and ctx.me.guild_permissions.manage_messages:
             await ctx.message.delete()
+            return True
+        return False
+    
+    # Safe way of deleting messages on servers
+    @classmethod
+    async def deletePrevMessages(cls, ctx, num):
+        if not isinstance(ctx.channel, DMChannel) and ctx.me.guild_permissions.manage_messages:
+            await ctx.channel.purge(limit=num)
             return True
         return False
         
