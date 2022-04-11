@@ -35,11 +35,11 @@ The main library used to developed this project is [discord.py](https://github.c
 
 ## Authors
 This project was developed by:
-* SneakyGerbil
+* Tikitikitikidesuka
     * deesneakygerbil@gmail.com
-    * [Itch.io](https://sneakygerbil.itch.io)
+    * [Itch.io](https://tikitikitikidesuka.itch.io)
     * [YouTube](https://www.youtube.com/channel/UC4r_WrJ5SXjd10lFQdO3UyQ)
-    * [GitHub](https://github.com/SneakyGerbil)
+    * [GitHub](https://github.com/tikitikitikidesuka)
 
 ## License
 Shield: [![CC BY-SA 4.0][cc-by-sa-shield]][cc-by-sa]
